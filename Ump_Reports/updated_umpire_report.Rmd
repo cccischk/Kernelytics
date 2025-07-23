@@ -1,0 +1,123 @@
+---
+output: 
+  pdf_document:
+    keep_tex: true
+header-includes:
+  - \usepackage{float}
+  - \usepackage{graphicx}
+params:
+  game_data: "7_2 GroundSloths @ BlueCaps.csv"
+  home_team: "BLCP"
+  away_team: "GRND"
+  game_date: "07/02"
+  league: "KCL"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(tidyverse)
+library(patchwork)
+
+here::i_am("Ump_Reports/ump_report_test.Rmd")
+source(here("Ump_Reports", "ump_report.R"))
+source(here("Ump_Reports", "zone_analysis.R"))
+
+```
+
+\begin{center}
+\LARGE \textbf{KCL Umpire Report}
+\end{center}
+
+\begin{center}
+\begin{minipage}{0.28\textwidth}
+\centering
+\Large \textbf{`r params$away_team` vs `r params$home_team`}
+\end{minipage}
+\hfill
+\begin{minipage}{0.28\textwidth}
+\centering
+\includegraphics[width=\textwidth]{ump-mask.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.28\textwidth}
+\centering
+\Large `r params$game_date`
+\end{minipage}
+\end{center}
+
+
+
+```{r data import/cleaning, include=FALSE}
+
+if (params$league == "KCL") {
+  df <- read_csv(here("kclData", params$game_data))
+} else {
+  df <- read_csv(here("CornBeltersData", params$game_data))
+}
+
+# Setup function calls
+calls <- classify(df)
+split_calls <- splits(calls)
+plots <- rings(calls)
+ggsave("plots/overall_accuracy.png", create.dir = T,
+       plots$overall, width = 3.5, height = 4)
+percentile <- round(ecdf(overall_acc)(plots$accuracy) * 100)
+```
+
+\begin{center}
+\begin{minipage}[t]{0.25\textwidth}
+\centering
+\vspace*{-10em}
+\Large \textbf{Called `r plots$correct` out of}
+\Large \textbf{`r plots$total` taken pitches correctly}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.28\textwidth}
+\centering
+\includegraphics[width=\textwidth]{plots/overall_accuracy.png}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.25\textwidth}
+\centering
+\vspace*{-8em}
+\Large \textbf{`r percentile`th Percentile}
+\end{minipage}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+\begin{center}
+  \LARGE \textbf{Zone Plots}
+\end{center}
+
+```{r zone plot, echo = FALSE, fig.pos ='H'}
+incorrect_balls <- split_calls$iz %>%
+   filter(PitchCall == 'BallCalled')
+incorrect_strikes <- split_calls$oz %>%
+  filter(PitchCall == "StrikeCalled")
+
+zone_plots <- zones(incorrect_balls, incorrect_strikes)
+
+final_plot <- zone_plots$oz_plot + zone_plots$iz_plot +
+  plot_annotation(theme = theme(plot.margin = margin(0, 0, 0, 0)))
+
+final_plot
+```
+
+
