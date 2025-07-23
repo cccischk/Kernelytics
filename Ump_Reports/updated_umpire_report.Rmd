@@ -27,7 +27,7 @@ source(here("Ump_Reports", "zone_analysis.R"))
 ```
 
 \begin{center}
-\LARGE \textbf{KCL Umpire Report}
+\huge \textbf{KCL Umpire Report}
 \end{center}
 
 \begin{center}
@@ -64,7 +64,16 @@ plots <- rings(calls)
 ggsave("plots/overall_accuracy.png", create.dir = T,
        plots$overall, width = 3.5, height = 4)
 percentile <- round(ecdf(overall_acc)(plots$accuracy) * 100)
+
+
 ```
+
+\begin{center}
+\centering
+\vspace{1em}
+\LARGE \textbf{Overall Accuracy}
+\vspace{1em}
+\end{center}
 
 \begin{center}
 \begin{minipage}[t]{0.25\textwidth}
@@ -81,26 +90,11 @@ percentile <- round(ecdf(overall_acc)(plots$accuracy) * 100)
 \hfill
 \begin{minipage}[t]{0.25\textwidth}
 \centering
-\vspace*{-8em}
-\Large \textbf{`r percentile`th Percentile}
+\vspace*{-9em}
+\Large \textbf{KCL Accuracy Percentile: `r percentile`}
 \end{minipage}
 \end{center}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\newpage
 
 \begin{center}
   \LARGE \textbf{Zone Plots}
@@ -113,11 +107,13 @@ incorrect_strikes <- split_calls$oz %>%
   filter(PitchCall == "StrikeCalled")
 
 zone_plots <- zones(incorrect_balls, incorrect_strikes)
+zp <- zone(incorrect_balls, incorrect_strikes)
+# 
+# final_plot <- zone_plots$oz_plot + zone_plots$iz_plot +
+#   plot_annotation(theme = theme(plot.margin = margin(0, 0, 0, 0)))
 
-final_plot <- zone_plots$oz_plot + zone_plots$iz_plot +
-  plot_annotation(theme = theme(plot.margin = margin(0, 0, 0, 0)))
-
-final_plot
+#final_plot
+zp
 ```
 
 

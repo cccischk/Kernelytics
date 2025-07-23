@@ -146,21 +146,13 @@ rings <- function(df){
     theme_void() +
     annotate("text",
              x = 0, y = 0,
-             label = paste0(
-               " ",
-               round(accuracy * 100, 1),
-               "%\n",
-               correct,
-               "/",
-               total),
-             size = 4,
+             label = paste0(round(accuracy * 100, 1),"%"),
+             size = 10,
              color = "black",
              hjust = 0.5,
              vjust = 0.5) +
     theme(legend.position = "none", plot.title = element_text(hjust = 0.5),
-          plot.margin = margin(0,0,0,0)) +
-    labs(title = "Overall Accuracy") 
-  
+          plot.margin = margin(0,0,0,0))
   
   iz <- ggplot(iz_help, aes(x=2, y = value, fill = category)) + 
     geom_col(color = "white", width = 1) +
@@ -269,5 +261,29 @@ zones <- function(incorrect_balls, incorrect_strikes){
 }
 
 
+#------------------------SINGLE ZONE GRAPHIC-----------------------------------#
 
+zone <- function(incorrect_balls, incorrect_strikes){
+  missed_calls <- bind_rows(incorrect_balls, incorrect_strikes)
+  plot <- ggplot(missed_calls, aes(x=PlateLocSide, y = PlateLocHeight,
+                                           color = CorrectCall)) +
+    geom_point(alpha = 0.7, size= 4
+    ) +
+    coord_fixed() + 
+    scale_x_continuous(limits = c(-4,4)) +
+    scale_y_continuous(limits = c(0,5)) + 
+    scale_color_manual(
+      values = c("BallCalled" = "red", "StrikeCalled" = "green"),
+      labels = c("Called Strike", "Called Ball")) +
+    labs(
+      x = "Horizontal Pitch Location (ft)",
+      y = "Vertical Plate Location (ft)",
+      color = "Pitch Call"
+    ) +
+    theme_void() +
+    geom_rect(aes(xmin = -1, xmax = 1, ymin = 1.5, ymax = 3.5),
+              color = "black", fill = NA, linetype = "dashed")
+    
+    return(plot)
+}
 
