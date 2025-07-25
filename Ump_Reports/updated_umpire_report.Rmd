@@ -1,17 +1,18 @@
 ---
-output: 
-  pdf_document:
-    keep_tex: true
-header-includes:
-  - \usepackage{float}
-  - \usepackage{graphicx}
 params:
   game_data: "7_2 GroundSloths @ BlueCaps.csv"
   home_team: "BLCP"
   away_team: "GRND"
   game_date: "07/02"
   league: "KCL"
+
+output: 
+  pdf_document:
+    keep_tex: true
+    includes:
+      in_header: header.tex
 ---
+
 
 
 ```{r setup, include=FALSE}
@@ -25,10 +26,13 @@ source(here("Ump_Reports", "ump_report.R"))
 source(here("Ump_Reports", "zone_analysis.R"))
 
 ```
-
+\vspace*{-8em}
 \begin{center}
-\huge \textbf{KCL Umpire Report}
+\vspace*{-1em}
+\LARGE \textbf{KCL Umpire Report}
+\vspace*{-1em}
 \end{center}
+
 
 \begin{center}
 \begin{minipage}{0.28\textwidth}
@@ -45,6 +49,7 @@ source(here("Ump_Reports", "zone_analysis.R"))
 \centering
 \Large `r params$game_date`
 \end{minipage}
+\vspace*{-1em}
 \end{center}
 
 
@@ -61,8 +66,21 @@ if (params$league == "KCL") {
 calls <- classify(df)
 split_calls <- splits(calls)
 plots <- rings(calls)
+incorrect_balls <- split_calls$iz %>%
+   filter(PitchCall == 'BallCalled')
+incorrect_strikes <- split_calls$oz %>%
+  filter(PitchCall == "StrikeCalled")
+misses <- missed_calls(incorrect_balls, incorrect_strikes)
+
+
 ggsave("plots/overall_accuracy.png", create.dir = T,
-       plots$overall, width = 3.5, height = 4)
+       plots$overall, width = 3.5, height = 3.2, dpi = 300)
+ggsave("plots/missed_calls.png", create.dir = T,
+       misses, width = 3, height = 3, dpi = 300)
+ggsave("plots/iz_accuracy.png", create.dir = T,
+       plots$iz, width = 2, height = 2, dpi = 300)
+ggsave("plots/oz_accuracy.png", create.dir = T,
+       plots$oz, width = 2, height = 2, dpi = 300)
 percentile <- round(ecdf(overall_acc)(plots$accuracy) * 100)
 
 
@@ -71,49 +89,55 @@ percentile <- round(ecdf(overall_acc)(plots$accuracy) * 100)
 \begin{center}
 \centering
 \vspace{1em}
-\LARGE \textbf{Overall Accuracy}
-\vspace{1em}
+\Large \textbf{Overall Accuracy}
 \end{center}
 
 \begin{center}
+\begin{minipage}[t][3.5in][t]{\textwidth}
 \begin{minipage}[t]{0.25\textwidth}
 \centering
-\vspace*{-10em}
-\Large \textbf{Called `r plots$correct` out of}
-\Large \textbf{`r plots$total` taken pitches correctly}
+\vspace*{-5em}
+\textbf{Called `r plots$correct` out of}
+\textbf{`r plots$total` taken pitches correctly}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.28\textwidth}
 \centering
-\includegraphics[width=\textwidth]{plots/overall_accuracy.png}
+\includegraphics[width=0.8\textwidth]{plots/overall_accuracy.png}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.25\textwidth}
 \centering
-\vspace*{-9em}
-\Large \textbf{KCL Accuracy Percentile: `r percentile`}
+\vspace*{-4em}
+\textbf{KCL Accuracy Percentile: `r percentile`}
+\end{minipage}
 \end{minipage}
 \end{center}
 
+\vspace*{-15em}
 
 \begin{center}
-  \LARGE \textbf{Zone Plots}
+\Large \textbf{All Missed Calls}
 \end{center}
 
-```{r zone plot, echo = FALSE, fig.pos ='H'}
-incorrect_balls <- split_calls$iz %>%
-   filter(PitchCall == 'BallCalled')
-incorrect_strikes <- split_calls$oz %>%
-  filter(PitchCall == "StrikeCalled")
+\begin{center}
+\begin{minipage}[t]{0.3\textwidth}
+\centering
+\includegraphics{plots/missed_calls.png}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.2\textwidth}
+\centering
 
-zone_plots <- zones(incorrect_balls, incorrect_strikes)
-zp <- zone(incorrect_balls, incorrect_strikes)
-# 
-# final_plot <- zone_plots$oz_plot + zone_plots$iz_plot +
-#   plot_annotation(theme = theme(plot.margin = margin(0, 0, 0, 0)))
+\includegraphics{plots/iz_accuracy.png}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.2\textwidth}
+\centering
 
-#final_plot
-zp
-```
+\includegraphics{plots/oz_accuracy.png}
+\end{minipage}
+\end{center}
+
 
 

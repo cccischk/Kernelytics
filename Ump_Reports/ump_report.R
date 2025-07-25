@@ -25,9 +25,15 @@ library(ggforce)
 # 
 # 
 # accuracy_rings <- rings(dfc)
-
-
-
+# 
+# incorrect_balls <- split_calls$iz %>%
+#   filter(PitchCall == 'BallCalled')
+# incorrect_strikes <- split_calls$oz %>%
+#   filter(PitchCall == "StrikeCalled")
+# 
+# zp <- zone(incorrect_balls, incorrect_strikes)
+# 
+# zp
 
 #---------------------------------CLASSIFY-------------------------------------#
 
@@ -39,14 +45,25 @@ classify <- function(df){
     drop_na(PitchCall, PlateLocSide, PlateLocHeight, PitcherThrows, BatterSide) %>%
     filter(PitchCall %in% c("StrikeCalled", "BallCalled"))
   
-  # Add column for the correct call
-  result$CorrectCall <- ifelse(
-    result$PlateLocSide >= -1 & result$PlateLocSide <= 1 &
-      result$PlateLocHeight >= 1.5 & result$PlateLocHeight <= 3.5,
-    "StrikeCalled",
-    "BallCalled"
-  )
+  # Add columns for edges of the ball
+  result$BallEdgeR <- result$PlateLocSide + 0.1208
+  result$BallEdgeL <- result$PlateLocSide - 0.1208
+  result$BallEdgeU <- result$PlateLocHeight + 0.1208
+  result$BallEdgeD <- result$PlateLocHeight - 0.1208
   
+  # Add column for the correct call
+  result <- result %>%
+    mutate(
+      CorrectCall = if_else(
+        BallEdgeL <= 1 &
+          BallEdgeR >= -1 &
+          BallEdgeD <= 3.5 &
+          BallEdgeU >= 1.5,
+        "StrikeCalled",
+        "BallCalled"
+      )
+    )
+
   result$Accuracy <- ifelse(
     result$PitchCall == result$CorrectCall,
     "Correct",
@@ -261,17 +278,16 @@ zones <- function(incorrect_balls, incorrect_strikes){
 }
 
 
-#------------------------SINGLE ZONE GRAPHIC-----------------------------------#
+#------------------------MISSED CALLS GRAPHIC----------------------------------#
 
-zone <- function(incorrect_balls, incorrect_strikes){
+missed_calls <- function(incorrect_balls, incorrect_strikes){
   missed_calls <- bind_rows(incorrect_balls, incorrect_strikes)
   plot <- ggplot(missed_calls, aes(x=PlateLocSide, y = PlateLocHeight,
                                            color = CorrectCall)) +
-    geom_point(alpha = 0.7, size= 4
-    ) +
+    geom_circle(aes(x0 = PlateLocSide, y0 = PlateLocHeight, r = 0.1208)) + 
     coord_fixed() + 
-    scale_x_continuous(limits = c(-4,4)) +
-    scale_y_continuous(limits = c(0,5)) + 
+    scale_x_continuous(limits = c(-2.5,2.5), expand = c(0,0)) +
+    scale_y_continuous(limits = c(1,4), expand = c(0,0)) + 
     scale_color_manual(
       values = c("BallCalled" = "red", "StrikeCalled" = "green"),
       labels = c("Called Strike", "Called Ball")) +
@@ -282,7 +298,8 @@ zone <- function(incorrect_balls, incorrect_strikes){
     ) +
     theme_void() +
     geom_rect(aes(xmin = -1, xmax = 1, ymin = 1.5, ymax = 3.5),
-              color = "black", fill = NA, linetype = "dashed")
+              color = "black", fill = NA, linetype = "dashed") +
+    theme(legend.position = "none", plot.margin = margin(0,0,0,0), unit = "lines")
     
     return(plot)
 }

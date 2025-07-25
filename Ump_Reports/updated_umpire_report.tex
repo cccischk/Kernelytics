@@ -56,8 +56,11 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\usepackage{float}
+\PassOptionsToPackage{top=0.2in, bottom=0.2in, left=0.5in, right=0.5in}{geometry}
+\pagestyle{empty}
 \usepackage{graphicx}
+\usepackage{float}
+\raggedbottom
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
@@ -70,8 +73,11 @@
 
 \begin{document}
 
+\vspace*{-8em}
 \begin{center}
-\huge \textbf{KCL Umpire Report}
+\vspace*{-1em}
+\LARGE \textbf{KCL Umpire Report}
+\vspace*{-1em}
 \end{center}
 
 \begin{center}
@@ -89,39 +95,60 @@
 \centering
 \Large 07/02
 \end{minipage}
+\vspace*{-1em}
 \end{center}
 
 \begin{center}
 \centering
 \vspace{1em}
-\LARGE \textbf{Overall Accuracy}
-\vspace{1em}
+\Large \textbf{Overall Accuracy}
 \end{center}
 
 \begin{center}
+\begin{minipage}[t][3.5in][t]{\textwidth}
 \begin{minipage}[t]{0.25\textwidth}
 \centering
-\vspace*{-10em}
-\Large \textbf{Called 114 out of}
-\Large \textbf{127 taken pitches correctly}
+\vspace*{-5em}
+\textbf{Called 113 out of}
+\textbf{127 taken pitches correctly}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.28\textwidth}
 \centering
-\includegraphics[width=\textwidth]{plots/overall_accuracy.png}
+\includegraphics[width=0.8\textwidth]{plots/overall_accuracy.png}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.25\textwidth}
 \centering
-\vspace*{-9em}
-\Large \textbf{KCL Accuracy Percentile: 91}
+\vspace*{-4em}
+\textbf{KCL Accuracy Percentile: 94}
+\end{minipage}
 \end{minipage}
 \end{center}
 
+\vspace*{-15em}
+
 \begin{center}
-  \LARGE \textbf{Zone Plots}
+\Large \textbf{All Missed Calls}
 \end{center}
 
-\pandocbounded{\includegraphics[keepaspectratio]{updated_umpire_report_files/figure-latex/zone plot-1.pdf}}
+\begin{center}
+\begin{minipage}[t]{0.3\textwidth}
+\centering
+\includegraphics{plots/missed_calls.png}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.2\textwidth}
+\centering
+
+\includegraphics{plots/iz_accuracy.png}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.2\textwidth}
+\centering
+
+\includegraphics{plots/oz_accuracy.png}
+\end{minipage}
+\end{center}
 
 \end{document}
