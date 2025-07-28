@@ -282,15 +282,19 @@ zones <- function(incorrect_balls, incorrect_strikes){
 
 missed_calls <- function(incorrect_balls, incorrect_strikes){
   missed_calls <- bind_rows(incorrect_balls, incorrect_strikes)
-  plot <- ggplot(missed_calls, aes(x=PlateLocSide, y = PlateLocHeight,
-                                           color = CorrectCall)) +
-    geom_circle(aes(x0 = PlateLocSide, y0 = PlateLocHeight, r = 0.1208)) + 
+  plot <- ggplot(missed_calls, aes(x=PlateLocSide, y = PlateLocHeight)) +
+    geom_circle(aes(x0 = PlateLocSide, y0 = PlateLocHeight, r = 0.1208,
+                    fill = CorrectCall),
+                    color = NA, alpha = 0.6) + 
     coord_fixed() + 
     scale_x_continuous(limits = c(-2.5,2.5), expand = c(0,0)) +
     scale_y_continuous(limits = c(1,4), expand = c(0,0)) + 
-    scale_color_manual(
+    scale_fill_manual(
       values = c("BallCalled" = "red", "StrikeCalled" = "green"),
       labels = c("Called Strike", "Called Ball")) +
+    # scale_color_manual(
+    #   values = c("BallCalled" = "red", "StrikeCalled" = "green"),
+    #   labels = c("Called Strike", "Called Ball")) +
     labs(
       x = "Horizontal Pitch Location (ft)",
       y = "Vertical Plate Location (ft)",
