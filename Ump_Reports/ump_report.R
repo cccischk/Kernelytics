@@ -42,7 +42,7 @@ classify <- function(df){
   
   # Drop NA's from important columns and select only called balls/strikes
   result <- df %>%
-    drop_na(PitchCall, PlateLocSide, PlateLocHeight, PitcherThrows, BatterSide) %>%
+    drop_na(PitchCall, PlateLocSide, PlateLocHeight) %>%
     filter(PitchCall %in% c("StrikeCalled", "BallCalled"))
   
   # Add columns for edges of the ball

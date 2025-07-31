@@ -2,18 +2,18 @@
 
 # CHANGE THESE VALUES
 
-file = "07_19_Championship_Merchants_vs_Bobcats.csv"
-home = "Bobcats"
-away = "Merchants"
+file = "07_28_2025 6_28_53 PM-Lafayette Aviators 2025@Normal Cornbelters.csv"
+home = "NOR"
+away = "LAF"
 month = "07"
-day = "19"
+day = "28"
 league = "KCL"
 
 
 # RUN THIS TO RENDER
 # OUTPUT: Ump_Reports/output
 rmarkdown::render(
-  "umpire_report.Rmd",
+  "updated_umpire_report.Rmd",
   params = list(
     game_data = file,
     home_team = home,

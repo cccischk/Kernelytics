@@ -29,7 +29,7 @@ source(here("Ump_Reports", "zone_analysis.R"))
 \vspace*{-8em}
 \begin{center}
 \vspace*{-1em}
-\LARGE \textbf{KCL Umpire Report}
+\LARGE \textbf{Corn Crib Umpire Report}
 \vspace*{-1em}
 \end{center}
 
@@ -93,7 +93,7 @@ percentile <- round(ecdf(overall_acc)(plots$accuracy) * 100)
 \end{center}
 
 \begin{center}
-\begin{minipage}[t][3.5in][t]{\textwidth}
+\begin{minipage}[t]{\textwidth}
 \begin{minipage}[t]{0.25\textwidth}
 \centering
 \vspace*{-5em}
@@ -113,31 +113,25 @@ percentile <- round(ecdf(overall_acc)(plots$accuracy) * 100)
 \end{minipage}
 \end{minipage}
 \end{center}
-
-\vspace*{-15em}
-
 \begin{center}
 \Large \textbf{All Missed Calls}
 \end{center}
 
+\vspace{1em}
+
 \begin{center}
-\begin{minipage}[t]{0.3\textwidth}
+\begin{minipage}{0.3\textwidth}
 \centering
-\includegraphics{plots/missed_calls.png}
+\includegraphics[height=2.2in]{plots/missed_calls.png}
 \end{minipage}
 \hfill
-\begin{minipage}[t]{0.2\textwidth}
+\begin{minipage}{0.3\textwidth}
 \centering
-
-\includegraphics{plots/iz_accuracy.png}
+\includegraphics[height=1.6in]{plots/iz_accuracy.png}
 \end{minipage}
 \hfill
-\begin{minipage}[t]{0.2\textwidth}
+\begin{minipage}{0.3\textwidth}
 \centering
-
-\includegraphics{plots/oz_accuracy.png}
+\includegraphics[height=1.6in]{plots/oz_accuracy.png}
 \end{minipage}
 \end{center}
-
-
-

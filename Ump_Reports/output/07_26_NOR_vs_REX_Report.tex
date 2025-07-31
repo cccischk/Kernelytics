@@ -56,7 +56,7 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\PassOptionsToPackage{top=0.5in, bottom=0.5in, left=0.5in, right=0.5in}{geometry}
+\PassOptionsToPackage{top=0.2in, bottom=0.2in, left=0.5in, right=0.5in}{geometry}
 \pagestyle{empty}
 \usepackage{graphicx}
 \usepackage{float}
@@ -83,7 +83,7 @@
 \begin{center}
 \begin{minipage}{0.28\textwidth}
 \centering
-\Large \textbf{GRND vs BLCP}
+\Large \textbf{REX vs NOR}
 \end{minipage}
 \hfill
 \begin{minipage}{0.28\textwidth}
@@ -93,7 +93,7 @@
 \hfill
 \begin{minipage}{0.28\textwidth}
 \centering
-\Large 07/02
+\Large 07/26
 \end{minipage}
 \vspace*{-1em}
 \end{center}
@@ -105,12 +105,12 @@
 \end{center}
 
 \begin{center}
-\begin{minipage}[t]{\textwidth}
+\begin{minipage}[t][3.5in][t]{\textwidth}
 \begin{minipage}[t]{0.25\textwidth}
 \centering
 \vspace*{-5em}
-\textbf{Called 113 out of}
-\textbf{127 taken pitches correctly}
+\textbf{Called 158 out of}
+\textbf{195 taken pitches correctly}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.28\textwidth}
@@ -121,30 +121,33 @@
 \begin{minipage}[t]{0.25\textwidth}
 \centering
 \vspace*{-4em}
-\textbf{KCL Accuracy Percentile: 95}
+\textbf{KCL Accuracy Percentile: 44}
 \end{minipage}
 \end{minipage}
 \end{center}
+
+\vspace*{-15em}
+
 \begin{center}
 \Large \textbf{All Missed Calls}
 \end{center}
 
-\vspace{1em}
-
 \begin{center}
-\begin{minipage}{0.3\textwidth}
+\begin{minipage}[t]{0.3\textwidth}
 \centering
-\includegraphics[height=2.2in]{plots/missed_calls.png}
+\includegraphics{plots/missed_calls.png}
 \end{minipage}
 \hfill
-\begin{minipage}{0.3\textwidth}
+\begin{minipage}[t]{0.2\textwidth}
 \centering
-\includegraphics[height=1.6in]{plots/iz_accuracy.png}
+
+\includegraphics{plots/iz_accuracy.png}
 \end{minipage}
 \hfill
-\begin{minipage}{0.3\textwidth}
+\begin{minipage}[t]{0.2\textwidth}
 \centering
-\includegraphics[height=1.6in]{plots/oz_accuracy.png}
+
+\includegraphics{plots/oz_accuracy.png}
 \end{minipage}
 \end{center}
 
