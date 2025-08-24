@@ -45,24 +45,40 @@ classify <- function(df){
     drop_na(PitchCall, PlateLocSide, PlateLocHeight) %>%
     filter(PitchCall %in% c("StrikeCalled", "BallCalled"))
   
-  # Add columns for edges of the ball
-  result$BallEdgeR <- result$PlateLocSide + 0.1208
-  result$BallEdgeL <- result$PlateLocSide - 0.1208
-  result$BallEdgeU <- result$PlateLocHeight + 0.1208
-  result$BallEdgeD <- result$PlateLocHeight - 0.1208
   
-  # Add column for the correct call
+  xmin <- -1; xmax <- 1
+  ymin <- 1.5; ymax <- 3.5
+  
+  r <- 1.45 / 12
+  
   result <- result %>%
     mutate(
-      CorrectCall = if_else(
-        BallEdgeL <= 1 &
-          BallEdgeR >= -1 &
-          BallEdgeD <= 3.5 &
-          BallEdgeU >= 1.5,
-        "StrikeCalled",
-        "BallCalled"
-      )
-    )
+      # distance from point to AABB
+      dx = pmax(xmin - PlateLocSide, 0, PlateLocSide - xmax),
+      dy = pmax(ymin - PlateLocHeight, 0, PlateLocHeight - ymax),
+      touches_zone = (dx^2 + dy^2) <= r^2, # True if ball intersects zone
+      CorrectCall = if_else(touches_zone, "StrikeCalled", "BallCalled")
+    ) %>%
+    select(-dx, -dy)
+  
+  # # Add columns for edges of the ball
+  # result$BallEdgeR <- result$PlateLocSide + 0.1208
+  # result$BallEdgeL <- result$PlateLocSide - 0.1208
+  # result$BallEdgeU <- result$PlateLocHeight + 0.1208
+  # result$BallEdgeD <- result$PlateLocHeight - 0.1208
+  # 
+  # # Add column for the correct call
+  # result <- result %>%
+  #   mutate(
+  #     CorrectCall = if_else(
+  #       BallEdgeL <= 1 &
+  #         BallEdgeR >= -1 &
+  #         BallEdgeD <= 3.5 &
+  #         BallEdgeU >= 1.5,
+  #       "StrikeCalled",
+  #       "BallCalled"
+  #     )
+  #   )
 
   result$Accuracy <- ifelse(
     result$PitchCall == result$CorrectCall,
@@ -292,17 +308,17 @@ missed_calls <- function(incorrect_balls, incorrect_strikes){
     scale_fill_manual(
       values = c("BallCalled" = "red", "StrikeCalled" = "green"),
       labels = c("Called Strike", "Called Ball")) +
-    # scale_color_manual(
-    #   values = c("BallCalled" = "red", "StrikeCalled" = "green"),
-    #   labels = c("Called Strike", "Called Ball")) +
-    labs(
-      x = "Horizontal Pitch Location (ft)",
-      y = "Vertical Plate Location (ft)",
-      color = "Pitch Call"
-    ) +
+    geom_contour(
+      data = grid_df,
+      aes(x = x, y = y, z = strike_prob),
+      breaks = c(0.5),
+      color = "red",
+      linewidth = 0.5,
+      linetype = "solid"
+    )+
     theme_void() +
     geom_rect(aes(xmin = -1, xmax = 1, ymin = 1.5, ymax = 3.5),
-              color = "black", fill = NA, linetype = "dashed") +
+              color = "black", fill = NA, linewidth = 1.4) +
     theme(legend.position = "none", plot.margin = margin(0,0,0,0), unit = "lines")
     
     return(plot)

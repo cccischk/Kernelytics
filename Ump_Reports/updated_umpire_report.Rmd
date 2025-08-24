@@ -8,7 +8,7 @@ params:
 
 output: 
   pdf_document:
-    keep_tex: true
+    keep_tex: false
     includes:
       in_header: header.tex
 ---
@@ -115,6 +115,8 @@ percentile <- round(ecdf(overall_acc)(plots$accuracy) * 100)
 \end{center}
 \begin{center}
 \Large \textbf{All Missed Calls}
+
+\small True Zone and \textcolor{red}{KCL Expected Zone}
 \end{center}
 
 \vspace{1em}
