@@ -21,3 +21,5 @@ handedness)
 This file is the Rmd file for the reports I generated for each game in the season.
 This file sources ump_report.R and zone_analysis.R.
 The reports can be found in the Season Reports folder of this repository.
+
+Umpire Research Blog Post:  https://cornbeltersbaseball.com/examining-umpire-performance-in-the-kcl
